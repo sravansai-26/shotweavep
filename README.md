@@ -17,8 +17,14 @@ With tools for scheduling, budgeting, communication, and creative collaboration,
 
 ## 🧩 Project Structure
 
-shotweavep/ ├── client/          # Frontend (React + TypeScript) ├── server/          # Backend (Python/Node) ├── docker-compose.yml ├── .gitignore └── README.md
+```folder structure
+shotweavep/
+├── README.md
+├── client/          # Frontend (React + TypeScript) ├── server/          # Backend (Python/Node)
+├── docker-compose.yml
+├── .gitignore
 
+```
 ---
 
 ## ⚙️ How to Run Locally
