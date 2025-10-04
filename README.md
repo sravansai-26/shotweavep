@@ -1,7 +1,7 @@
 ---
 
 ### 🎬 ShotWeave
----
+
 
 **AI-powered Production OS for the Film Industry**  
 Built to simplify film production workflows — from pre-production planning to post-production insights.
@@ -19,7 +19,7 @@ With tools for scheduling, budgeting, communication, and creative collaboration,
 
 ### 🧩 Project Structure
 
-```folder structure
+```bash
 shotweavep/
 ├── README.md
 ├── client/          # Frontend (React + TypeScript)
@@ -127,11 +127,11 @@ Feel free to use, modify, and contribute.
 
 ### 🌐 Links
 
-GitHub: 
+**GitHub:** 
 
 [https://github.com/sravansai-26/shotweavep.git](https://github.com/sravansai-26/shotweavep.git)
 
-Project:
+**Project:**
 
 **ShotWeave** — AI-powered Production OS for the Film Industry
 
