@@ -1,12 +1,14 @@
+---
 
 ### 🎬 ShotWeave
+---
 
 **AI-powered Production OS for the Film Industry**  
 Built to simplify film production workflows — from pre-production planning to post-production insights.
 
 ---
 
-## 🚀 Overview
+### 🚀 Overview
 
 ShotWeave is a smart production management system designed for modern filmmakers.  
 It connects every role in the filmmaking process — producers, directors, crew, and editors — on one AI-driven platform.
@@ -15,19 +17,20 @@ With tools for scheduling, budgeting, communication, and creative collaboration,
 
 ---
 
-## 🧩 Project Structure
+### 🧩 Project Structure
 
 ```folder structure
 shotweavep/
 ├── README.md
-├── client/          # Frontend (React + TypeScript) ├── server/          # Backend (Python/Node)
+├── client/          # Frontend (React + TypeScript)
+├── server/          # Backend (Python/Node)
 ├── docker-compose.yml
 ├── .gitignore
 
 ```
 ---
 
-## ⚙️ How to Run Locally
+### ⚙️ How to Run Locally
 
 ### 1. Clone the Repository
 ```bash
@@ -61,7 +64,7 @@ python main.py
 
 ---
 
-## 🔐 Environment Variables
+### 🔐 Environment Variables
 
 Create a .env file in both the client and server directories.
 
@@ -75,7 +78,7 @@ PORT=5000
 
 ---
 
-## 🧠 Features (Planned + In Progress)
+### 🧠 Features (Planned + In Progress)
 
 🎥 Production scheduling and role-based task boards
 
