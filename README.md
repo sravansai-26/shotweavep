@@ -1,6 +1,5 @@
----
 
-# 🎬 ShotWeave
+### 🎬 ShotWeave
 
 **AI-powered Production OS for the Film Industry**  
 Built to simplify film production workflows — from pre-production planning to post-production insights.
