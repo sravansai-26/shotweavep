@@ -1,13 +1,13 @@
-// client/src/pages/Profile.tsx
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 
+// CRITICAL UPDATE: User interface now includes all four defined roles
 interface User {
   name: string;
   email: string;
   username: string;
-  role: 'Producer/CEO' | 'Line Producer';
+  role: 'Producer/CEO' | 'Line Producer' | '1st AD/Unit Manager' | 'VFX Supervisor/Director';
 }
 
 interface ProfileProps {
@@ -22,13 +22,32 @@ const Profile: React.FC<ProfileProps> = ({ user, onLogout }) => {
     visible: { y: 0, opacity: 1, transition: { type: "spring", stiffness: 80 } },
   };
 
+  // Helper function to map role to a color for visual appeal
+  const getRoleColor = (role: User['role']) => {
+    switch (role) {
+      case 'Producer/CEO':
+        return 'text-red-400';
+      case 'Line Producer':
+        return 'text-yellow-400';
+      case '1st AD/Unit Manager':
+        return 'text-green-400';
+      case 'VFX Supervisor/Director':
+        return 'text-blue-400';
+      default:
+        return 'text-gray-400';
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-900 text-white flex flex-col items-center p-6">
       
       <header className="py-8 w-full max-w-2xl flex justify-between items-center border-b border-gray-700 mb-8 z-10">
-        <h1 className="text-3xl font-bold text-yellow-400">User Profile (Shotweave)</h1>
+        <h1 className="text-3xl font-bold text-yellow-400">Access Credentials (Shotweave)</h1>
         <div className="flex gap-4">
-          <Link to="/dashboard" className="text-blue-400 hover:text-blue-300 transition">
+          <Link 
+            to="/dashboard" 
+            className="py-1 px-3 bg-gray-700/50 hover:bg-gray-700 rounded transition text-blue-400"
+          >
             Go to Dashboard
           </Link>
           <button 
@@ -50,21 +69,24 @@ const Profile: React.FC<ProfileProps> = ({ user, onLogout }) => {
         "
       >
         <h3 className="text-2xl font-semibold mb-6 border-b border-gray-700 pb-2">
-          {user.name} - <span className="text-sm italic text-yellow-400">{user.role}</span>
+          {user.name} - <span className={`text-sm italic ${getRoleColor(user.role)}`}>{user.role}</span>
         </h3>
         
         <div className="space-y-4 text-lg">
           <p>
-            <span className="font-medium text-gray-400 w-32 inline-block">Username:</span> 
+            <span className="font-medium text-gray-400 w-48 inline-block">System Username:</span> 
             <span className="font-mono text-white ml-2">{user.username}</span>
           </p>
           <p>
-            <span className="font-medium text-gray-400 w-32 inline-block">Email:</span> 
+            <span className="font-medium text-gray-400 w-48 inline-block">Contact Email:</span> 
             <span className="text-gray-300 ml-2">{user.email}</span>
           </p>
           <p>
-            <span className="font-medium text-gray-400 w-32 inline-block">Access Level:</span> 
-            <span className="text-green-400 ml-2">{user.role}</span>
+            <span className="font-medium text-gray-400 w-48 inline-block">Primary Role / Access Level:</span> 
+            <span className={`font-semibold ml-2 ${getRoleColor(user.role)}`}>{user.role}</span>
+          </p>
+          <p className="pt-2 text-sm text-gray-500">
+             *Your password is encrypted and cannot be viewed here.
           </p>
         </div>
         

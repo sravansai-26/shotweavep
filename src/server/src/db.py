@@ -1,4 +1,3 @@
-# server/src/db.py
 from pymongo import MongoClient
 import os
 from dotenv import load_dotenv
@@ -6,8 +5,8 @@ from dotenv import load_dotenv
 load_dotenv() # Load environment variables from .env
 
 # Replace with your actual MongoDB connection string
-# For local dev: "mongodb://localhost:27017/shotweavep"
-MONGO_URI = os.getenv("MONGO_URI", "mongodb://localhost:27017/shotweavep") 
+# For local dev: "mongodb://localhost:27017/shotweave"
+MONGO_URI = os.getenv("MONGO_URI", "mongodb://localhost:27017/shotweave") 
 
 try:
     client = MongoClient(MONGO_URI, serverSelectionTimeoutMS=5000)
@@ -23,7 +22,7 @@ except Exception as e:
 
 def register_user(user_data):
     """Registers a new user (Name, Email, Username, Hashed Password, Role)."""
-    # FIX APPLIED HERE: Changed 'if db:' to 'if db is not None:'
+    # Use 'db is not None' to check connection status
     if db is not None:
         # Check if username or email already exists
         if db.users.find_one({"$or": [{"username": user_data['username']}, {"email": user_data['email']}]}):
@@ -36,7 +35,7 @@ def register_user(user_data):
 
 def find_user(username, password):
     """Finds a user by username and validates the password."""
-    # FIX APPLIED HERE: Changed 'if db:' to 'if db is not None:'
+    # Use 'db is not None' to check connection status
     if db is not None:
         # In a real app, password should be securely hashed and compared
         user = db.users.find_one({"username": username, "password": password}, {"_id": 0})
@@ -50,7 +49,7 @@ def find_user(username, password):
 
 def get_lvr_data():
     """Returns mock LVR data for the Line Producer dashboard."""
-    # FIX APPLIED HERE: Changed 'if db:' to 'if db is not None:'
+    # Use 'db is not None' to check connection status
     if db is not None: 
         # Check if vendors collection is empty and seed data
         if db.vendors.count_documents({}) == 0:
@@ -62,7 +61,7 @@ def get_lvr_data():
             ]
             db.vendors.insert_many(vendors)
     
-    # FIX APPLIED HERE: Changed 'if db:' to 'if db is not None:'
+    # Use 'db is not None' to check connection status
     if db is not None:
         # Retrieve all vendors, excluding MongoDB's internal ID
         return list(db.vendors.find({}, {"_id": 0}))

@@ -1,14 +1,15 @@
-// client/src/pages/Login.tsx
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { motion } from 'framer-motion'; // <-- Import Framer Motion
+import { motion } from 'framer-motion'; 
+import { ArrowLeft } from 'lucide-react'; // Icon for back button
 
 // Define the expected user structure (matching the server response)
 interface User {
   name: string;
   email: string;
   username: string;
-  role: 'Producer/CEO' | 'Line Producer';
+  // Updated to include all four roles for type consistency across the app
+  role: 'Producer/CEO' | 'Line Producer' | '1st AD/Unit Manager' | 'VFX Supervisor/Director'; 
 }
 
 interface LoginProps {
@@ -39,7 +40,7 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
 
       if (data.success) {
         // Critical step: Pass the returned user data to the parent App component
-        onLogin(data.user); 
+        onLogin(data.user as User); // Assert type to include new roles
         setMessage("Login successful. Redirecting to dashboard...");
         setTimeout(() => navigate('/dashboard'), 1000);
       } else {
@@ -80,8 +81,19 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
           p-8 rounded-xl shadow-2xl       // Deep shadow for security look
           border border-blue-700/50        // Subtle blue outline for access theme
           backdrop-blur-sm                 // Glass effect
+          relative                         // Added for absolute positioning
         "
       >
+        {/* Back Button for Easy Navigation */}
+        <Link 
+            to="/" 
+            className="absolute top-4 left-4 p-2 rounded-full 
+                       bg-gray-700/50 hover:bg-blue-600/70 text-white 
+                       transition duration-200"
+        >
+            <ArrowLeft size={20} />
+        </Link>
+        
         <h2 className="text-3xl font-bold text-white mb-6 text-center border-b border-gray-700 pb-3">
           Access Shotweave Console
         </h2>

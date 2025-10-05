@@ -1,4 +1,3 @@
-# server/src/app.py
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from db import register_user, find_user, get_lvr_data
@@ -8,7 +7,7 @@ app = Flask(__name__)
 # Allow CORS from the React port (default 5173 or 3000)
 CORS(app, resources={r"/api/*": {"origins": "*"}}) 
 
-# --- API Endpoints ---
+# --- 1. User Authentication Endpoints ---
 
 @app.route('/api/signup', methods=['POST'])
 def signup():
@@ -39,7 +38,7 @@ def login():
     else:
         return jsonify({"success": False, "message": result["message"]}), 401 # Unauthorized
 
-# --- Line Producer Endpoints ---
+# --- 2. Line Producer Endpoints (Operational Planning) ---
 
 @app.route('/api/lp/breakdown', methods=['POST'])
 def lp_script_breakdown():
@@ -57,7 +56,7 @@ def lp_get_lvr():
     lvr_data = get_lvr_data()
     return jsonify({"success": True, "vendors": lvr_data}), 200
 
-# --- Producer/CEO Endpoints ---
+# --- 3. Producer/CEO Endpoints (Financial Oversight) ---
 
 @app.route('/api/ceo/risk_meter', methods=['POST'])
 def ceo_risk_meter():
@@ -76,6 +75,40 @@ def ceo_risk_meter():
         return jsonify({"success": True, "risk_analysis": risk_result}), 200
     except Exception as e:
         return jsonify({"success": False, "message": str(e)}), 500
+
+# --- 4. Executor Endpoints (Daily Operations) ---
+# For 1st AD/Unit Manager - Handles Daily Progress Reports (DPRs)
+
+@app.route('/api/executor/dpr_submit', methods=['POST'])
+def executor_submit_dpr():
+    """Executor: Receives daily progress and expense logs."""
+    data = request.json
+    # In a real app, this data would be saved to a 'DailyReports' collection.
+    required_fields = ['scenes_shot', 'daily_spend', 'delay_minutes']
+    if not all(field in data for field in required_fields):
+        return jsonify({"success": False, "message": "DPR missing required fields"}), 400
+    
+    print(f"DPR received from {data.get('user', 'Unknown')}: Scenes={data['scenes_shot']}, Spend={data['daily_spend']}")
+    
+    return jsonify({"success": True, "message": "Daily Progress Report logged successfully."}), 200
+
+
+# --- 5. Creative Endpoints (VFX/Post-Production) ---
+# For VFX Supervisor/Director - Handles asset tracking
+
+@app.route('/api/creative/asset_status', methods=['POST'])
+def creative_update_asset():
+    """Creative: Updates status of a VFX/Post-Production asset."""
+    data = request.json
+    # In a real app, this updates the status in a 'VFXAssets' collection.
+    required_fields = ['asset_id', 'new_status']
+    if not all(field in data for field in required_fields):
+        return jsonify({"success": False, "message": "Asset status update missing fields"}), 400
+        
+    print(f"Asset Status updated for ID {data['asset_id']}: Status={data['new_status']}")
+    
+    return jsonify({"success": True, "message": f"Asset {data['asset_id']} status updated to {data['new_status']}."}), 200
+
 
 if __name__ == '__main__':
     # Initialize LVR data on startup

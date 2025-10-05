@@ -1,7 +1,7 @@
-// client/src/pages/Signup.tsx
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { motion } from 'framer-motion'; // <-- Import Framer Motion
+import { motion } from 'framer-motion'; 
+import { ArrowLeft } from 'lucide-react'; // Icon for back button
 
 const Signup: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -9,7 +9,8 @@ const Signup: React.FC = () => {
     email: '',
     username: '',
     password: '',
-    role: 'Producer/CEO', // Default role
+    // Update the default role to a valid option
+    role: 'Producer/CEO', 
   });
   const [message, setMessage] = useState('');
   const navigate = useNavigate();
@@ -75,8 +76,19 @@ const Signup: React.FC = () => {
           p-8 rounded-xl shadow-2xl       // Deep shadow for security look
           border border-red-700/50         // Subtle red outline for high-alert/security theme
           backdrop-blur-sm                 // Glass effect
+          relative                         // Needed for absolute positioning of the back button
         "
       >
+        {/* Back Button for Easy Navigation */}
+        <Link 
+            to="/" 
+            className="absolute top-4 left-4 p-2 rounded-full 
+                       bg-gray-700/50 hover:bg-red-600/70 text-white 
+                       transition duration-200"
+        >
+            <ArrowLeft size={20} />
+        </Link>
+
         <h2 className="text-3xl font-bold text-white mb-6 text-center border-b border-gray-700 pb-3">
           Initiate Project Access
         </h2>
@@ -93,6 +105,10 @@ const Signup: React.FC = () => {
             <select name="role" value={formData.role} onChange={handleChange} className={selectStyle} required>
               <option value="Producer/CEO" className="bg-gray-700">Producer/CEO (Financial Oversight)</option>
               <option value="Line Producer" className="bg-gray-700">Line Producer (Operational Management)</option>
+              {/* --- NEW ROLES ADDED HERE --- */}
+              <option value="1st AD/Unit Manager" className="bg-gray-700">1st AD/Unit Manager (Daily Operations/Executor)</option>
+              <option value="VFX Supervisor/Director" className="bg-gray-700">VFX Supervisor/Director (Creative Assets/Kanban)</option>
+              {/* --------------------------- */}
             </select>
           </div>
 
