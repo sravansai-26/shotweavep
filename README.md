@@ -105,11 +105,12 @@ The project includes Dockerfiles and a `docker-compose.yml` (if created) for aut
     ```
 3.  **Access:** The application will be live at `http://localhost:5173`.
 
-### C. Demonstration Video
+### C. Demonstration and Documentation Assets
 
-| Component | Status | Host/Port |
+| Component | Status | File Path |
 | :--- | :--- | :--- |
-| **Demo Video (Offline Submission)** | Yes | **assets/demo.mp4** |
+| **Demo Video (Offline Submission)** | Yes | **assets/shotweavefinaldemo_.mp4** |
+| **Project Presentation** | Yes | **assets/The-Final-Cut_Team.pptx** |
 
 ---
 
