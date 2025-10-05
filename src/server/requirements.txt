@@ -1,5 +1,5 @@
-numpy==1.24.4
-scikit-learn==1.3.0
+numpy==2.0.0 
+scikit-learn==1.4.1 # Stable high version
 # Add any other core dependencies you need below, such as:
 flask
 flask-cors
