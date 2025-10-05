@@ -1,0 +1,54 @@
+# docker-compose.yml (Assumed location: deployment/docker-compose.yml)
+version: '3.8'
+
+services:
+  # Flask Backend Service
+  api:
+    build:
+      # CORRECTED: Context needs to point to the server directory
+      context: ../src/server 
+      dockerfile: Dockerfile
+    container_name: shotweave_api
+    restart: always
+    ports:
+      - "5000:5000"
+    volumes:
+      # CORRECTED: Map the source code folder to the /app directory inside the container
+      - ../src/server:/app
+      # Map the .env file (assuming it's in the server dir)
+      - ../src/server/.env:/app/.env 
+    # The API service runs entirely on the single /app volume mapping.
+
+  # React Frontend Service
+  client:
+    build:
+      # CORRECTED: Context needs to point to the client directory
+      context: ../src/client
+      dockerfile: Dockerfile
+    container_name: shotweave_client
+    restart: always
+    # CRITICAL FIX: Map host port 5173 to the container's Nginx port 80
+    ports:
+      - "5173:80" 
+    # Volumes are often unnecessary for a multi-stage Nginx build, but removing the source mount
+    # prevents conflicts with the built files. We keep the node_modules exclusion for safety.
+    volumes:
+      - /app/node_modules # This line prevents the node_modules folder from being overwritten by the host
+    environment:
+      # CRITICAL FIX: The frontend must talk to the API service by its internal network name 'api'
+      - VITE_API_URL=http://api:5000/api 
+    depends_on:
+      - api
+      
+  # MongoDB Service (Optional - highly recommended for a complete dockerized solution)
+  # If you use this, uncomment the 'mongo' service and the 'volumes' section below.
+  # mongo:
+  #   image: mongo:latest
+  #   container_name: shotweave_mongo
+  #   ports:
+  #     - "27017:27017"
+  #   volumes:
+  #     - mongo_data:/data/db
+
+# volumes:
+#   mongo_data:
