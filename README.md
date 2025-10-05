@@ -173,6 +173,3 @@ Contact:
 📍 Team: The Final Cut — Hackathon Submission for CineHack.ai 2025
 
 ---
-
-Would you like me to now generate the **other mandatory files** too (`LICENSE`, `CODE_OF_CONDUCT.md`, `CONTRIBUTING.md`, and `deployment/ENDPOINTS.md` templates)?  
-They’re required for your repo to be fully compliant before submission.
