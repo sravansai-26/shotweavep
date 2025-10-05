@@ -7,15 +7,17 @@ WORKDIR /app
 # Copy the requirements file into the container
 COPY requirements.txt .
 
-# Install any needed packages
+# Install all necessary packages, including Flask dependencies and Gunicorn
+# Gunicorn must be in requirements.txt (added via pip freeze)
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy the rest of the application code (app.py, db.py, etc.)
-# The dot '.' refers to the current folder where the Dockerfile is located (the project root)
 COPY . /app
 
-# Expose the port Flask listens on
+# Expose the port Gunicorn will bind to (Flask default)
 EXPOSE 5000
 
-# Run app.py when the container launches
-CMD ["python", "app.py"]
+# --- PRODUCTION RUN COMMAND ---
+# Run the application using Gunicorn (the production WSGI server).
+# app:app refers to the Flask instance named 'app' found in the 'app.py' file.
+CMD ["gunicorn", "--bind", "0.0.0.0:5000", "app:app"]
