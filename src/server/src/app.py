@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from .db import register_user, find_user, get_lvr_data
-from ai_service import predict_risk_score
+from .ai_service import predict_risk_score
 import PyPDF2
 import docx
 import os
