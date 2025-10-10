@@ -1,9 +1,0 @@
-numpy==2.0.0 
-scikit-learn==1.4.1 
-flask
-flask-cors
-gunicorn
-pymongo
-spacy
-PyPDF2
-python-docx
