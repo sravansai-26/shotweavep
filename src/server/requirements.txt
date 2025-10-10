@@ -1,12 +1,9 @@
 numpy==2.0.0 
-scikit-learn==1.4.1 # Stable high version
-# Add any other core dependencies you need below, such as:
+scikit-learn==1.4.1 
 flask
 flask-cors
 gunicorn
 pymongo
 spacy
-
-
-
-Fix: Final dependency version update for NumPy/Scikit-learn compatibility"
+PyPDF2
+python-docx
