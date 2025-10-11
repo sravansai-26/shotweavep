@@ -1,11 +1,12 @@
 // client/src/pages/LandingPage.tsx
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion'; // <--- FRAMER MOTION IMPORT
+// IMPORT CORRECTION: Added 'type Transition' to the import
+import { motion, type Variants, type Transition } from 'framer-motion'; 
 
 // --- Animation Variants ---
 
-const containerVariants = {
+const containerVariants: Variants = { // Explicitly typing container as well for best practice
   hidden: { opacity: 0 },
   visible: { 
     opacity: 1, 
@@ -15,15 +16,21 @@ const containerVariants = {
   },
 };
 
-const itemVariants = {
+// Explicitly define the Spring Transition object that caused the error
+const springTransition: Transition = {
+    type: "spring", // TypeScript is now happy because it knows this is a Framer Motion Transition type
+    stiffness: 120,
+    // Add a default damping value if needed to satisfy stricter types (optional, but can help)
+    damping: 10,
+};
+
+// Use the explicitly typed transition object in the variants
+const itemVariants: Variants = {
   hidden: { y: 20, opacity: 0 },
   visible: { 
     y: 0, 
     opacity: 1,
-    transition: {
-      type: "spring", // Use a spring transition for a smooth, natural feel
-      stiffness: 100,
-    }
+    transition: springTransition, // Referenced the strongly typed object
   },
 };
 

@@ -1,20 +1,39 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { motion } from 'framer-motion'; 
+// CORRECTION: Imported 'Variants' and 'Transition' types to resolve compilation errors
+import { motion, type Variants, type Transition } from 'framer-motion'; 
 import { ArrowLeft } from 'lucide-react'; // Icon for back button
 
 // Define the expected user structure (matching the server response)
+// NOTE: This interface must be identical across App.tsx and any component receiving a User object.
 interface User {
   name: string;
   email: string;
   username: string;
-  // Updated to include all four roles for type consistency across the app
+  // This union type must match the definition used across your entire application (App.tsx, ProducerDashboard.tsx, etc.)
   role: 'Producer/CEO' | 'Line Producer' | '1st AD/Unit Manager' | 'VFX Supervisor/Director'; 
 }
 
 interface LoginProps {
   onLogin: (user: User) => void;
 }
+
+// FIX: Explicitly define the transition object that was causing the TypeScript error
+const springTransition: Transition = {
+    type: "spring", 
+    stiffness: 80, 
+    damping: 10 
+};
+
+// Framer Motion variants for card entry
+const cardVariants: Variants = {
+  hidden: { scale: 0.9, opacity: 0 },
+  visible: { 
+    scale: 1, 
+    opacity: 1, 
+    transition: springTransition, // Use the explicitly typed Transition object
+  },
+};
 
 const Login: React.FC<LoginProps> = ({ onLogin }) => {
   const [formData, setFormData] = useState({ username: '', password: '' });
@@ -51,20 +70,6 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
     }
   };
 
-  // Framer Motion variants for card entry
-  const cardVariants = {
-    hidden: { scale: 0.9, opacity: 0 },
-    visible: { 
-      scale: 1, 
-      opacity: 1, 
-      transition: { 
-        type: "spring", 
-        stiffness: 80, 
-        damping: 10 
-      } 
-    },
-  };
-
   // Styles for inputs and select, consistent with Signup but focused on blue for Login
   const inputStyle = "p-3 bg-gray-700 border border-gray-600 rounded-md text-white placeholder-gray-400 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition duration-200";
 
@@ -78,18 +83,18 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
         animate="visible"
         className="
           w-full max-w-md bg-gray-800/80   // Semi-transparent card background
-          p-8 rounded-xl shadow-2xl       // Deep shadow for security look
-          border border-blue-700/50        // Subtle blue outline for access theme
-          backdrop-blur-sm                 // Glass effect
-          relative                         // Added for absolute positioning
+          p-8 rounded-xl shadow-2xl      // Deep shadow for security look
+          border border-blue-700/50      // Subtle blue outline for access theme
+          backdrop-blur-sm               // Glass effect
+          relative                       // Added for absolute positioning
         "
       >
         {/* Back Button for Easy Navigation */}
         <Link 
             to="/" 
             className="absolute top-4 left-4 p-2 rounded-full 
-                       bg-gray-700/50 hover:bg-blue-600/70 text-white 
-                       transition duration-200"
+                        bg-gray-700/50 hover:bg-blue-600/70 text-white 
+                        transition duration-200"
         >
             <ArrowLeft size={20} />
         </Link>

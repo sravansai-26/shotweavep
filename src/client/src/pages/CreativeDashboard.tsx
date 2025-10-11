@@ -2,14 +2,6 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Kanban, CheckCircle, Clock, XCircle, Zap } from 'lucide-react';
 
-// Mock Data for the Kanban Board (NLP tagged assets)
-const initialVFXShots = [
-  { id: 1, name: 'Shot 4A: Starship Landing', status: 'TODO', complexity: 'High' },
-  { id: 2, name: 'Shot 12C: CGI Crowds', status: 'IN_PROGRESS', complexity: 'Medium' },
-  { id: 3, name: 'Shot 33B: Green Screen BG Replace', status: 'READY_FOR_REVIEW', complexity: 'Low' },
-  { id: 4, name: 'Shot 55D: Final Explosion FX', status: 'COMPLETE', complexity: 'High' },
-];
-
 interface Shot {
   id: number;
   name: string;
@@ -17,10 +9,20 @@ interface Shot {
   complexity: 'Low' | 'Medium' | 'High';
 }
 
+// Mock Data for the Kanban Board (NLP tagged assets)
+// FIX 1: Explicitly typed the array as Shot[] to resolve TS2322 type mismatch errors.
+const initialVFXShots: Shot[] = [
+  { id: 1, name: 'Shot 4A: Starship Landing', status: 'TODO', complexity: 'High' },
+  { id: 2, name: 'Shot 12C: CGI Crowds', status: 'IN_PROGRESS', complexity: 'Medium' },
+  { id: 3, name: 'Shot 33B: Green Screen BG Replace', status: 'READY_FOR_REVIEW', complexity: 'Low' },
+  { id: 4, name: 'Shot 55D: Final Explosion FX', status: 'COMPLETE', complexity: 'High' },
+];
+
 interface User {
   name: string;
   email: string;
   username: string;
+  // NOTE: This union type must match the definition used in App.tsx, Login.tsx, and Signup.tsx
   role: 'Producer/CEO' | 'Line Producer' | '1st AD/Unit Manager' | 'VFX Supervisor/Director';
 }
 
@@ -61,7 +63,8 @@ const KanbanColumn: React.FC<{ title: string; shots: Shot[]; icon: React.ReactNo
 
 
 const CreativeDashboard: React.FC<CreativeDashboardProps> = ({ user, onLogout }) => {
-  const [shots, setShots] = useState(initialVFXShots);
+  // FIX 2: Removed unused setter 'setShots' to resolve TS6133
+  const [shots] = useState(initialVFXShots);
   
   // Group shots by status
   const shotsByStatus = (status: Shot['status']) => shots.filter(shot => shot.status === status);

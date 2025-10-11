@@ -7,6 +7,7 @@ interface User {
   name: string; 
   email: string; 
   username: string; 
+  // NOTE: This role type definition must match across all dashboard components (App.tsx, CreativeDashboard.tsx, etc.)
   role: 'Producer/CEO' | 'Line Producer' | '1st AD/Unit Manager' | 'VFX Supervisor/Director'; 
 }
 interface Vendor { 
@@ -75,10 +76,11 @@ const QuoteRequestModal: React.FC<ModalProps> = ({ vendor, onClose, onSend, brea
                 <form onSubmit={handleSubmit} className="space-y-4">
                     
                     <div>
-                        <label className="text-gray-300 font-medium flex items-center mb-1">
+                        <label htmlFor="days-input" className="text-gray-300 font-medium flex items-center mb-1">
                             <Clock size={16} className="mr-2 text-yellow-500" /> Estimated No. of Days:
                         </label>
                         <input 
+                            id="days-input" // Added ID for accessibility
                             type="number" 
                             min="1" 
                             value={formData.days} 
@@ -89,10 +91,12 @@ const QuoteRequestModal: React.FC<ModalProps> = ({ vendor, onClose, onSend, brea
                     </div>
                     
                     <div>
-                        <label className="text-gray-300 font-medium flex items-center mb-1">
+                        {/* ACCESSIBILITY FIX: Linked label and select via htmlFor/id */}
+                        <label htmlFor="scale-select" className="text-gray-300 font-medium flex items-center mb-1">
                             <MapPin size={16} className="mr-2 text-yellow-500" /> Scale of Cinema:
                         </label>
                         <select 
+                            id="scale-select" // Added ID for accessibility
                             value={formData.scale} 
                             onChange={e => setFormData({...formData, scale: e.target.value})} 
                             className={inputStyle} 
@@ -105,10 +109,11 @@ const QuoteRequestModal: React.FC<ModalProps> = ({ vendor, onClose, onSend, brea
                     </div>
 
                     <div>
-                        <label className="text-gray-300 font-medium flex items-center mb-1">
+                        <label htmlFor="requirements-input" className="text-gray-300 font-medium flex items-center mb-1">
                             <Users size={16} className="mr-2 text-yellow-500" /> Specific Requirements:
                         </label>
                         <textarea 
+                            id="requirements-input" // Added ID for accessibility
                             value={formData.requirements} 
                             onChange={e => setFormData({...formData, requirements: e.target.value})} 
                             className={`${inputStyle} h-20`} 
@@ -259,10 +264,11 @@ const LineProducerDashboard: React.FC<LineProducerDashboardProps> = ({ user, onL
           </h2>
           
           <div className="mb-4">
-            <label className="text-gray-300 font-medium flex items-center mb-1">
+            <label htmlFor="script-file" className="text-gray-300 font-medium flex items-center mb-1">
               <Film size={16} className="mr-2 text-yellow-500" /> Upload Script (PDF/DOC/DOCX):
             </label>
             <input 
+              id="script-file" // Added ID for accessibility
               type="file" 
               accept=".pdf,.doc,.docx" 
               onChange={(e) => setScriptFile(e.target.files ? e.target.files[0] : null)} 

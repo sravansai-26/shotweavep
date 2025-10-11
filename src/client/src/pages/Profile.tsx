@@ -1,5 +1,6 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+// FIX: Added 'type Variants' and 'type Transition' to correctly type the animation object
+import { motion, type Variants, type Transition } from 'framer-motion';
 import { Link } from 'react-router-dom';
 
 // CRITICAL UPDATE: User interface now includes all four defined roles
@@ -15,13 +16,21 @@ interface ProfileProps {
   onLogout: () => void;
 }
 
+// FIX: Define the transition object explicitly to resolve TypeScript error
+const springTransition: Transition = {
+    type: "spring",
+    stiffness: 80,
+    damping: 10, // Added damping for smoother spring animation
+};
+
+const cardVariants: Variants = {
+  hidden: { y: 20, opacity: 0 },
+  // Reference the explicitly typed transition object
+  visible: { y: 0, opacity: 1, transition: springTransition },
+};
+
 const Profile: React.FC<ProfileProps> = ({ user, onLogout }) => {
   
-  const cardVariants = {
-    hidden: { y: 20, opacity: 0 },
-    visible: { y: 0, opacity: 1, transition: { type: "spring", stiffness: 80 } },
-  };
-
   // Helper function to map role to a color for visual appeal
   const getRoleColor = (role: User['role']) => {
     switch (role) {
@@ -86,7 +95,7 @@ const Profile: React.FC<ProfileProps> = ({ user, onLogout }) => {
             <span className={`font-semibold ml-2 ${getRoleColor(user.role)}`}>{user.role}</span>
           </p>
           <p className="pt-2 text-sm text-gray-500">
-             *Your password is encrypted and cannot be viewed here.
+              *Your password is encrypted and cannot be viewed here.
           </p>
         </div>
         

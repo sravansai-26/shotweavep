@@ -1,7 +1,25 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { motion } from 'framer-motion'; 
+// CORRECTION: Imported 'Transition' type to resolve compilation errors
+import { motion, type Variants, type Transition } from 'framer-motion'; 
 import { ArrowLeft } from 'lucide-react'; // Icon for back button
+
+// FIX: Explicitly define the transition object that was causing the TypeScript error
+const springTransition: Transition = {
+    type: "spring", 
+    stiffness: 80, 
+    damping: 10 
+};
+
+// Framer Motion variants for card entry
+const cardVariants: Variants = {
+  hidden: { scale: 0.9, opacity: 0 },
+  visible: { 
+    scale: 1, 
+    opacity: 1, 
+    transition: springTransition, // Use the explicitly typed Transition object
+  },
+};
 
 const Signup: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -46,20 +64,6 @@ const Signup: React.FC = () => {
     }
   };
 
-  // Framer Motion variants for card entry
-  const cardVariants = {
-    hidden: { scale: 0.9, opacity: 0 },
-    visible: { 
-      scale: 1, 
-      opacity: 1, 
-      transition: { 
-        type: "spring", 
-        stiffness: 80, 
-        damping: 10 
-      } 
-    },
-  };
-
   const inputStyle = "p-3 bg-gray-700 border border-gray-600 rounded-md text-white placeholder-gray-400 focus:border-red-500 focus:ring-1 focus:ring-red-500 transition duration-200";
   const selectStyle = "p-3 bg-gray-700 border border-gray-600 rounded-md text-white focus:border-red-500 focus:ring-1 focus:ring-red-500 transition duration-200";
 
@@ -73,18 +77,18 @@ const Signup: React.FC = () => {
         animate="visible"
         className="
           w-full max-w-md bg-gray-800/80   // Semi-transparent card background
-          p-8 rounded-xl shadow-2xl       // Deep shadow for security look
-          border border-red-700/50         // Subtle red outline for high-alert/security theme
-          backdrop-blur-sm                 // Glass effect
-          relative                         // Needed for absolute positioning of the back button
+          p-8 rounded-xl shadow-2xl      // Deep shadow for security look
+          border border-red-700/50       // Subtle red outline for high-alert/security theme
+          backdrop-blur-sm               // Glass effect
+          relative                       // Needed for absolute positioning of the back button
         "
       >
         {/* Back Button for Easy Navigation */}
         <Link 
             to="/" 
             className="absolute top-4 left-4 p-2 rounded-full 
-                       bg-gray-700/50 hover:bg-red-600/70 text-white 
-                       transition duration-200"
+                        bg-gray-700/50 hover:bg-red-600/70 text-white 
+                        transition duration-200"
         >
             <ArrowLeft size={20} />
         </Link>
@@ -101,8 +105,10 @@ const Signup: React.FC = () => {
           <input type="password" name="password" placeholder="Secure Password" onChange={handleChange} className={inputStyle} required />
           
           <div className="flex flex-col">
-            <label className="text-sm font-medium text-gray-400 mb-1">Select Primary Role:</label>
-            <select name="role" value={formData.role} onChange={handleChange} className={selectStyle} required>
+            {/* ACCESSIBILITY FIX: Added htmlFor to associate the label with the select element */}
+            <label htmlFor="role-select" className="text-sm font-medium text-gray-400 mb-1">Select Primary Role:</label>
+            {/* ACCESSIBILITY FIX: Added id to make the select element targetable by the label */}
+            <select id="role-select" name="role" value={formData.role} onChange={handleChange} className={selectStyle} required>
               <option value="Producer/CEO" className="bg-gray-700">Producer/CEO (Financial Oversight)</option>
               <option value="Line Producer" className="bg-gray-700">Line Producer (Operational Management)</option>
               {/* --- NEW ROLES ADDED HERE --- */}
