@@ -19,6 +19,17 @@ interface User {
   role: 'Producer/CEO' | 'Line Producer' | '1st AD/Unit Manager' | 'VFX Supervisor/Director';
 }
 
+// ----------------------------------------------------------------------
+// FIX: 1. Define the props required by Login here.
+interface LoginProps {
+  onLogin: (user: User) => void;
+}
+
+// FIX: 2. Cast the imported Login component to explicitly accept these props.
+const TypedLogin = Login as React.FC<LoginProps>; 
+// ----------------------------------------------------------------------
+
+
 const App: React.FC = () => {
   // We should start with null and handle persistence via useEffect
   const [user, setUser] = useState<User | null>(null);
@@ -26,7 +37,7 @@ const App: React.FC = () => {
   // Simple logout function
   const logout = () => {
     setUser(null);
-    // Note: We are using localStorage for simple persistence here, 
+    // NOTE: We are using localStorage for simple persistence here, 
     // but for production multi-user apps, Firestore or a proper backend session is mandatory.
     localStorage.removeItem('shotweaveUser');
   };
@@ -73,8 +84,9 @@ const App: React.FC = () => {
     <Router>
       <Routes>
         <Route path="/" element={<LandingPage />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/login" element={<Login onLogin={handleLogin} />} />
+        <Route path="/signup" element={<Signup />} /> 
+        {/* FIX: Use the Type-Casted Login component to resolve the prop error */}
+        <Route path="/login" element={<TypedLogin onLogin={handleLogin} />} />
         <Route path="/logout" element={<Navigate to="/" />} />
 
         {/* Protected Dashboard Route - Renders the appropriate component based on role */}
