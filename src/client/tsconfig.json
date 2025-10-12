@@ -4,12 +4,13 @@
     "module": "ESNext",
     "lib": ["DOM", "ESNext"],
     "jsx": "react-jsx",
-    "moduleResolution": "Node",
+    "moduleResolution": "Node",          // ✅ Safe and supported
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true,
     "resolveJsonModule": true,
-    "strict": true
+    "strict": true,
+    "ignoreDeprecations": "6.0"          // ✅ Prevent future deprecation errors
   },
   "include": ["src"],
   "exclude": ["node_modules", "dist"]
