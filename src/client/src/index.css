@@ -1,3 +1,11 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* * CRITICAL FIX: Override browser/environment default white background.
+ * The bg-gray-900 color class is applied here using its hexadecimal value 
+ * to ensure the entire viewport respects the dark cinematic theme.
+ */
+body, #root {
+  background-color: #111827 !important; /* Tailwind's gray-900 */
+}

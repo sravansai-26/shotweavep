@@ -1,10 +1,23 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/jpeg" href="/shotweave_logo.jpeg" />
+    <link rel="icon" type="image/jpeg" href="./shotweave_logo.jpeg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Shotweave</title>
+    <style>
+      /* * Clean Reset: Removed aggressive background rules 
+       * to allow Tailwind's Preflight reset and the React component's 
+       * styling (e.g., bg-gray-900 or bg-gray-50) to take effect correctly.
+       * This ensures the root containers cover 100% of the viewport.
+       */
+      html, body, #root {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        width: 100%;
+      }
+    </style>
   </head>
   <body>
     <div id="root"></div>

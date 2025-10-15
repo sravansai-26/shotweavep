@@ -1,17 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+
+// --- IMPORT ALL COMPONENTS (FIX: Removed .tsx extensions) ---
 import LandingPage from './pages/LandingPage';
 import Signup from './pages/Signup';
 import Login from './pages/Login';
 import ProducerDashboard from './pages/ProducerDashboard';
 import LineProducerDashboard from './pages/LineProducerDashboard';
 import Profile from './pages/Profile';
-// --- IMPORT ALL DASHBOARDS ---
-import ExecutorDashboard from './pages/ExecutorDashboard'; // Assuming this component exists
-import CreativeDashboard from './pages/CreativeDashboard'; // Assuming this component exists
+import ExecutorDashboard from './pages/ExecutorDashboard';
+import CreativeDashboard from './pages/CreativeDashboard';
+
+// --- IMPORT STATIC PAGES (FIX: Removed .tsx extensions) ---
+import AboutUs from './pages/AboutUs'; 
+import Support from './pages/Support';
+import PrivacyPolicy from './pages/PrivacyPolicy';
+import TermsOfService from './pages/TermsOfService';
 // -----------------------------
 
-// CRITICAL: This MUST match the interface in ALL dashboard components (ProducerDashboard.tsx, etc.)
+// CRITICAL: User Interface Definition
 interface User {
   name: string;
   email: string;
@@ -19,100 +26,101 @@ interface User {
   role: 'Producer/CEO' | 'Line Producer' | '1st AD/Unit Manager' | 'VFX Supervisor/Director';
 }
 
-// ----------------------------------------------------------------------
-// FIX: 1. Define the props required by Login here.
+// Interface for props required by the Login component
 interface LoginProps {
   onLogin: (user: User) => void;
 }
 
-// FIX: 2. Cast the imported Login component to explicitly accept these props.
 const TypedLogin = Login as React.FC<LoginProps>; 
-// ----------------------------------------------------------------------
 
 
 const App: React.FC = () => {
-  // We should start with null and handle persistence via useEffect
   const [user, setUser] = useState<User | null>(null);
 
-  // Simple logout function
   const logout = () => {
     setUser(null);
-    // NOTE: We are using localStorage for simple persistence here, 
-    // but for production multi-user apps, Firestore or a proper backend session is mandatory.
     localStorage.removeItem('shotweaveUser');
   };
-
-  // Load user from localStorage on mount (simple persistence)
-  useEffect(() => {
-    const savedUser = localStorage.getItem('shotweaveUser');
-    if (savedUser) {
-      try {
-        // Ensure the loaded user object matches the updated interface
-        setUser(JSON.parse(savedUser) as User);
-      } catch (e) {
-        console.error("Failed to parse user data from storage", e);
-        // Clear corrupted storage data if parsing fails
-        localStorage.removeItem('shotweaveUser');
-      }
-    }
-  }, []);
 
   const handleLogin = (userData: User) => {
     setUser(userData);
     localStorage.setItem('shotweaveUser', JSON.stringify(userData));
   };
 
+  useEffect(() => {
+    const savedUser = localStorage.getItem('shotweaveUser');
+    if (savedUser) {
+      try {
+        setUser(JSON.parse(savedUser) as User);
+      } catch (e) {
+        console.error("Failed to parse user data from storage", e);
+        localStorage.removeItem('shotweaveUser');
+      }
+    }
+  }, []);
+
   // --- DYNAMIC ROLE-BASED ROUTING LOGIC ---
-  // This function dynamically selects the correct dashboard component based on the user's role.
   const getDashboardComponent = (currentUser: User) => {
+    const dashboardProps = { user: currentUser, onLogout: logout };
+
     switch (currentUser.role) {
       case 'Producer/CEO':
-        return <ProducerDashboard user={currentUser} onLogout={logout} />;
+        return <ProducerDashboard {...dashboardProps} />;
       case 'Line Producer':
-        return <LineProducerDashboard user={currentUser} onLogout={logout} />;
+        return <LineProducerDashboard {...dashboardProps} />;
       case '1st AD/Unit Manager':
-        return <ExecutorDashboard user={currentUser} onLogout={logout} />;
+        return <ExecutorDashboard {...dashboardProps} />;
       case 'VFX Supervisor/Director':
-        return <CreativeDashboard user={currentUser} onLogout={logout} />;
+        return <CreativeDashboard {...dashboardProps} />;
       default:
-        // Fallback for an unrecognized role 
         return <Navigate to="/login" />;
     }
   };
 
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<LandingPage />} />
-        <Route path="/signup" element={<Signup />} /> 
-        {/* FIX: Use the Type-Casted Login component to resolve the prop error */}
-        <Route path="/login" element={<TypedLogin onLogin={handleLogin} />} />
-        <Route path="/logout" element={<Navigate to="/" />} />
+    // ADDED: Root container to explicitly set the background and min height.
+    // This forces the app to control the viewport background, preventing the 
+    // browser's default white from showing through.
+    <div className="min-h-screen bg-gray-900 font-google-body">
+      <Router>
+        <Routes>
+          {/* Public Routes */}
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/signup" element={<Signup />} /> 
+          <Route path="/login" element={<TypedLogin onLogin={handleLogin} />} />
+          <Route path="/logout" element={<Navigate to="/" />} />
 
-        {/* Protected Dashboard Route - Renders the appropriate component based on role */}
-        <Route 
-          path="/dashboard" 
-          element={
-            user ? 
-              getDashboardComponent(user) // Uses the dynamic function
-              : <Navigate to="/login" />
-          } 
-        />
-        
-        {/* Profile Route */}
-        <Route 
-          path="/profile" 
-          element={
-            user ? 
-              <Profile user={user} onLogout={logout} /> 
-              : <Navigate to="/login" />
-          } 
-        />
-        
-        {/* Add a catch-all route for better user experience */}
-        <Route path="*" element={<Navigate to={user ? "/dashboard" : "/"} />} />
-      </Routes>
-    </Router>
+          {/* Static Footer Pages */}
+          <Route path="/about" element={<AboutUs />} />
+          <Route path="/support" element={<Support />} />
+          <Route path="/privacy" element={<PrivacyPolicy />} />
+          <Route path="/terms" element={<TermsOfService />} />
+
+          {/* Protected Dashboard Route - Renders the appropriate component based on role */}
+          <Route 
+            path="/dashboard" 
+            element={
+              user ? 
+                getDashboardComponent(user) // Uses the dynamic function
+                : <Navigate to="/login" />
+            } 
+          />
+          
+          {/* Profile Route */}
+          <Route 
+            path="/profile" 
+            element={
+              user ? 
+                <Profile user={user} onLogout={logout} /> 
+                : <Navigate to="/login" />
+            } 
+          />
+          
+          {/* Catch-all route: Redirects unauthorized users to the homepage or authorized users to their dashboard */}
+          <Route path="*" element={<Navigate to={user ? "/dashboard" : "/"} />} />
+        </Routes>
+      </Router>
+    </div>
   );
 };
 
