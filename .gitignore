@@ -1,16 +1,16 @@
-# Shotweave-MVP/.gitignore
-# Dependency folders
+#Dependency folders
 /client/node_modules
 /server/venv
 
-# Build/Cache folders
+#Build/Cache folders
 /client/dist
-/server/ai_models/*.pkl  # AI model can be large, ignore if regenerated
-/server/__pycache__
+/server/ai_models/*.pkl 
+/server/pycache
 
-# Environment variables (MUST BE IGNORED)
-/server/.env
+#Environment variables (MUST BE IGNORED)
+.env                 
+/server/.env        
 
-# IDE Files
+#IDE Files
 .idea
 .vscode
